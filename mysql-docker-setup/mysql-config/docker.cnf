@@ -1,0 +1,29 @@
+[mysqld]
+# Custom MySQL parameters
+innodb_buffer_pool_size = 256M
+max_connections = 200
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+
+# Performance tuning
+query_cache_size = 32M
+tmp_table_size = 64M
+max_heap_table_size = 64M
+
+# Logging
+general_log = 0
+slow_query_log = 1
+slow_query_log_file = /var/lib/mysql/mysql-slow.log
+long_query_time = 2
+
+bind-address = 0.0.0.0
+wait_timeout = 600
+interactive_timeout = 600
+sql_mode = "STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION"
+
+#dinesh - custom parameters
+lower_case_table_names=1
+log_bin_trust_function_creators=1
+max_allowed_packet=4G
+event_scheduler=ON 
+local-infile=1

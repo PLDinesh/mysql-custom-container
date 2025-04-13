@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mysql:
+    container_name: custom-mysql
+    image: custom-mysql:latest
+    build:
+      dockerfile: ./Dockerfile.mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ThisIsASuperSecretPasswordForRoot@2025
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: applicationuser
+      MYSQL_PASSWORD: ThisIsASuperSecretPasswordForApp@2025
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      #- ./mysql-config/my.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    restart: unless-stopped

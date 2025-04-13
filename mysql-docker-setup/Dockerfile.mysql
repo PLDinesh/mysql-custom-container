@@ -1,0 +1,22 @@
+# Use the official MySQL image with Alpine Linux for reduced vulnerabilities
+FROM mysql:8.0.41-bookworm
+
+# Copy custom MySQL configuration
+COPY ./mysql-config/my.cnf /etc/mysql/conf.d/mysqld.cnf
+RUN apt update
+RUN apt install -y dos2unix
+RUN dos2unix /etc/mysql/conf.d/mysqld.cnf
+# Copy initialization scripts
+#COPY ./init-scripts/ /docker-entrypoint-initdb.d/
+RUN chmod 700 /etc/mysql/conf.d/mysqld.cnf
+# Expose MySQL port
+EXPOSE 3306
+
+# Set healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD mysqladmin ping -h localhost -u root -p${MYSQL_ROOT_PASSWORD}
+
+# Volume for data persistence
+VOLUME ["/var/lib/mysql"]
+
+# Default command
+CMD ["mysqld","--lower_case_table_names=1","--log_bin_trust_function_creators=1","--local-infile=1","--max_allowed_packet=4G","--max_connections=1500"]
